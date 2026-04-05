@@ -57,7 +57,7 @@ const Translate = () => {
         <div className="flex justify-between items-center">
           <div className="">
             <select
-              className="rounded font-semibold text-sm p-1"
+              className="rounded font-semibold text-sm p-2 cursor-pointer"
               value={translateFrom}
               onChange={(e) => setTranslateFrom(e.target.value)}
             >
@@ -69,7 +69,7 @@ const Translate = () => {
               ))}
             </select>
           </div>
-          <div className="" onClick={exchangeLanguages}>
+          <div className="cursor-pointer" onClick={exchangeLanguages}>
             <svg width="1rem" height="1rem" viewBox="0 -1 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg">
 
               <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -86,7 +86,7 @@ const Translate = () => {
           <div className="">
             {/* 'to' seçimi için dil seçenekleri */}
             <select
-              className="rounded font-semibold text-sm p-1"
+              className="rounded font-semibold text-sm p-2 cursor-pointer"
               value={translateTo}
               onChange={(e) => setTranslateTo(e.target.value)}
             >
