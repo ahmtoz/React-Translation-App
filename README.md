@@ -1,8 +1,8 @@
-# 🌍 AI Translation App
+# 🌍 Translation App
 
 A translation application built with **React**, **Next.js**, and **Tailwind CSS**. This app provides real-time translations using the **MyMemory API**, featuring a clean and responsive user interface.
 
-![AI Translation App Screenshot](./public/translation.png)
+![Translation App Screenshot](./public/translation.png)
 
 ## 🚀 Live Demo
 Experience the app live at: [**translaterapp.vercel.app**](https://translaterapp.vercel.app/)
