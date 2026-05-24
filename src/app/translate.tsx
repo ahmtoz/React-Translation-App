@@ -1,48 +1,65 @@
 'use client'
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import countries from "../data";
 
-const Translate = () => {
-  // Giriş, çıkış ve dil seçimlerini yönetmek için durum kancaları
-  const [fromText, setFromText] = useState("");
-  const [toText, setToText] = useState("");
-  const [translateFrom, setTranslateFrom] = useState("");
-  const [translateTo, setTranslateTo] = useState("");
+interface TranslationMatch {
+  id: string;
+  segment: string;
+  translation: string;
+  source: string;
+  target: string;
+  quality: string;
+  reference: string;
+  "usage-count": number;
+  subject: string;
+  "created-by": string;
+  "last-updated-by": string;
+  createDate: string;
+  lastUpdateDate: string;
+  match: number;
+}
 
-  const translate = async () => {
-    // input, language-from ve language-to'nun boş olup olmadığını kontrol edin
+interface MyMemoryResponse {
+  responseData: {
+    translatedText: string;
+    match: number;
+  };
+  quotaFinished: boolean;
+  mtOnly: boolean;
+  matches: TranslationMatch[];
+}
+
+const Translate: React.FC = () => {
+  const [fromText, setFromText] = useState<string>("");
+  const [toText, setToText] = useState<string>("");
+  const [translateFrom, setTranslateFrom] = useState<string>("");
+  const [translateTo, setTranslateTo] = useState<string>("");
+
+  const translate = async (): Promise<void> => {
     if (!fromText.trim() || !translateFrom || !translateTo) return;
 
     try {
-      // Çeviri için API URL'si oluşturun
-      const apiUrl = `https://api.mymemory.translated.net/get?q=${fromText}&langpair=${translateFrom}|${translateTo}`;
+      const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(fromText)}&langpair=${translateFrom}|${translateTo}`;
 
       // API'den çeviri verilerini getirin
       const response = await fetch(apiUrl);
-      const data = await response.json();
+      const data: MyMemoryResponse = await response.json();
 
-      //Çevrilmiş metni 'toText' durumuna ayarlayın
-      setToText(data.matches[0]?.translation || data.responseData.translatedText);
+      setToText(data.matches?.[0]?.translation || data.responseData?.translatedText || "");
     } catch (error) {
-      // Çeviri hatalarını ele alın
       console.error("Translation error:", error);
     }
   };
 
-  // Seçilen dilleri değiştiren ve giriş metnini güncelleyen fonksiyon
-  const exchangeLanguages = () => {
-    // Dil kodlarını değiştirin
+  const exchangeLanguages = (): void => {
     setTranslateFrom(translateTo);
     setTranslateTo(translateFrom);
 
-    // Giriş alanındaki metni değiştir
     setFromText(toText);
 
-    // Güncellenmiş dil kodları ve metin ile çeviriyi tetikleyin
     translate();
   };
 
-  //İlk çeviriyi gerçekleştirmek ve girdi, "dil-den" veya "dil-e" değiştiğinde yeniden çalıştırmak için efekt kancası
   useEffect(() => {
     translate();
   }, [fromText, translateFrom, translateTo]);
@@ -84,7 +101,6 @@ const Translate = () => {
             </svg>
           </div>
           <div className="">
-            {/* 'to' seçimi için dil seçenekleri */}
             <select
               className="rounded font-semibold text-sm p-2 cursor-pointer"
               value={translateTo}
@@ -100,7 +116,6 @@ const Translate = () => {
           </div>
         </div>
 
-        {/* Giriş için örnek metin alanı */}
         <textarea
           className="w-full border-2 mt-3 rounded-lg p-3 h-32"
           spellCheck="false"
@@ -109,7 +124,6 @@ const Translate = () => {
           placeholder="Enter text"
         ></textarea>
 
-        {/* Çeviri sonucu için örnek metin alanı */}
         <textarea
           className="w-full border-2 mt-3 rounded-lg p-3 h-32"
           spellCheck="false"
